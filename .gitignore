@@ -1,0 +1,7 @@
+# Paket und Signaturschlüssel gehören nicht ins Repo
+*.crx
+*.pem
+
+# Betriebssystem-Kram
+.DS_Store
+Thumbs.db

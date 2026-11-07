@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <title>DNS64 Browser Extension</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+
+  <!-- Einrichtung, solange kein Key hinterlegt ist -->
+  <div class="setup">
+    <div class="card">
+      <h1>Mit Node64 verbinden</h1>
+      <div class="sub" style="margin-bottom:12px;white-space:normal">Adresse der Node und ein API-Key aus <em>Einstellungen&nbsp;›&nbsp;API-Keys</em>.</div>
+      <div class="field">
+        <label for="inUrl">Node-Adresse</label>
+        <input id="inUrl" type="text" spellcheck="false" placeholder="http://192.168.1.4:8080">
+      </div>
+      <div class="field">
+        <label for="inKey">API-Key</label>
+        <input id="inKey" type="password" spellcheck="false" placeholder="node64_…">
+      </div>
+      <button class="primary" id="btnSave">Speichern und testen</button>
+      <div class="msg" id="setupMsg"></div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="top">
+      <div class="brand">
+        <img src="icons/node64-mark.png" width="22" height="22" alt="">
+        <span class="brand-text"><b>DNS64</b><span>Browser Extension</span></span>
+      </div>
+      <div class="top-right">
+        <span class="chip" id="chipHost" title="Node">–</span>
+        <button class="iconbtn" id="btnTheme" title="Hell/Dunkel umschalten"><span class="i-sun"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="i-moon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/></svg></span></button>
+        <button class="iconbtn" id="btnOptions" title="Einstellungen">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3.2"/>
+            <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-2.9 1.2 2 2 0 1 1-4 0 1.7 1.7 0 0 0-2.9-1.2l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.7 1.7 0 0 0 4 15a2 2 0 1 1 0-4 1.7 1.7 0 0 0 1.2-2.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.7 1.7 0 0 0 10.9 4a2 2 0 1 1 4 0 1.7 1.7 0 0 0 2.9 1.2l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1A1.7 1.7 0 0 0 20 11a2 2 0 1 1 0 4Z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <section class="card" id="cardBlock">
+      <div class="row">
+        <div class="statusline">
+          <span class="dot" id="dot"></span>
+          <div style="min-width:0">
+            <h1 id="blockTitle">Blockieren aktiv</h1>
+            <div class="sub" id="blockSub">lade …</div>
+          </div>
+        </div>
+        <button class="switch" id="toggle" role="switch" aria-checked="true" aria-label="Blockieren umschalten"><span></span></button>
+      </div>
+
+      <div class="pauserow">
+        <div class="plabel"><span>Pausieren für</span><span class="khint"><kbd>T</kbd> schaltet</span></div>
+        <div class="pauses" id="pauses">
+          <button data-min="1">1m</button>
+          <button data-min="5">5m</button>
+          <button data-min="30">30m</button>
+          <button data-min="60">1h</button>
+          <button data-min="0">∞</button>
+          <button data-min="custom">…</button>
+        </div>
+        <div class="custom" id="customWrap" hidden>
+          <input id="inMin" type="number" min="1" max="1440" step="1" placeholder="Minuten (1–1440)">
+          <button id="btnCustom">Pause</button>
+        </div>
+      </div>
+
+      <div class="banner" id="banner" hidden>
+        <span id="bannerText">pausiert</span><b id="bannerCd"></b>
+        <button id="btnResume">fortsetzen</button>
+      </div>
+    </section>
+
+    <section class="card" id="cardSite">
+      <div class="site" id="siteRow">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 2.6 4.4 6v6.1c0 4.6 3.2 8.4 7.6 9.3 4.4-.9 7.6-4.7 7.6-9.3V6L12 2.6Z"/>
+        </svg>
+        <div style="min-width:0">
+          <div class="name" id="siteName">–</div>
+          <div class="sub" id="siteStatus">lade …</div>
+        </div>
+      </div>
+
+      <div class="btns">
+        <button class="allow" id="btnAllow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Erlauben <kbd>A</kbd></button>
+        <button class="deny" id="btnDeny"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></svg>Sperren <kbd>D</kbd></button>
+      </div>
+
+      <div class="footrow">
+        <button class="link" id="btnPause10">10 min pausieren</button>
+        <a class="link" id="openNode" href="#" target="_blank" rel="noreferrer">In Node64 öffnen ↗</a>
+      </div>
+    </section>
+
+    <div class="foot">
+      <span id="footLeft">DNS64</span>
+      <span class="st" id="footState">–</span>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script type="module" src="popup.js"></script>
+</body>
+</html>

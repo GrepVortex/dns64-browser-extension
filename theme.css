@@ -1,0 +1,82 @@
+/* Palette für Popup und Einstellungen.
+   Dunkel ist der Standard, html.light überschreibt.
+   Der Umschalter arbeitet relativ ("invertiert"): wirksam dunkel =
+   Systemvorliebe XOR Umschalter, damit die Anzeige weiter dem System folgt. */
+
+:root {
+  --bg: #101317;
+  --card: #191d23;
+  --card2: #1f242b;
+  --line: #2a3038;
+  --hover-line: #3c454f;
+  --hover-bg: #252b33;
+  --fg: #e8ebef;
+  --fg2: #a5adb8;
+  --fg3: #8a929c;
+  --green: #2ecc71;
+  --green-d: #178045;
+  --green-hover: #1a8b4c;
+  --red: #ef5350;
+  --amber: #f0b429;
+  --blue: #4da3ff;
+  --ok-fg: #7ee0a6;
+  --bad-fg: #ff8a87;
+  --ok-bg: rgba(46, 204, 113, 0.13);
+  --ok-line: rgba(46, 204, 113, 0.5);
+  --bad-bg: rgba(239, 83, 80, 0.13);
+  --bad-line: rgba(239, 83, 80, 0.5);
+  --ring-ok: rgba(46, 204, 113, 0.14);
+  --ring-warn: rgba(240, 180, 41, 0.14);
+  --ring-err: rgba(239, 83, 80, 0.14);
+  --banner-bg: rgba(240, 180, 41, 0.1);
+  --banner-line: rgba(240, 180, 41, 0.3);
+  --banner-fg: #f3c766;
+  --banner-strong: #ffd98a;
+  --switch-off: #3a414b;
+  --toast-bg: #262c34;
+  --toast-line: #38414c;
+  --toast-ok: #b7f0cd;
+  --toast-bad: #ffc9c7;
+}
+
+.iconbtn .i-sun,
+.iconbtn .i-moon { display: none; }
+.iconbtn[data-icon="sun"] .i-sun,
+.iconbtn[data-icon="moon"] .i-moon { display: block; }
+.iconbtn.manual { color: var(--blue); }
+
+html.light {
+  --bg: #f3f5f7;
+  --card: #ffffff;
+  --card2: #f2f4f7;
+  --line: #dde2e8;
+  --hover-line: #bcc5cf;
+  --hover-bg: #e9edf2;
+  --fg: #14171c;
+  --fg2: #4f5761;
+  --fg3: #626a74;
+  --green: #17924f;
+  --green-d: #128043;
+  --green-hover: #0f7038;
+  --red: #d0352b;
+  --amber: #b26a00;
+  --blue: #0b63c5;
+  --ok-fg: #12703f;
+  --bad-fg: #a82a22;
+  --ok-bg: rgba(23, 146, 79, 0.1);
+  --ok-line: rgba(23, 146, 79, 0.45);
+  --bad-bg: rgba(208, 53, 43, 0.09);
+  --bad-line: rgba(208, 53, 43, 0.45);
+  --ring-ok: rgba(23, 146, 79, 0.16);
+  --ring-warn: rgba(178, 106, 0, 0.16);
+  --ring-err: rgba(208, 53, 43, 0.16);
+  --banner-bg: rgba(178, 106, 0, 0.1);
+  --banner-line: rgba(178, 106, 0, 0.35);
+  --banner-fg: #8a5300;
+  --banner-strong: #6b3f00;
+  --switch-off: #c7ced7;
+  --toast-bg: #ffffff;
+  --toast-line: #d7dde4;
+  --toast-ok: #12603a;
+  --toast-bad: #9c221a;
+}
