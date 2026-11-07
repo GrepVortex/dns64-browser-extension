@@ -122,24 +122,21 @@ Alle drei anhaken – sie treffen für diese Erweiterung zu:
 
 ## 7. URL der Datenschutzerklärung
 
-Das Feld verlangt eine **öffentlich erreichbare Seite ohne Login**. Aktueller Stand:
-`github.com/GrepVortex/dns64-browser-extension` ist **privat**, GitHub Pages ist nicht aktiv – es gibt
-also noch keine gültige URL.
+Das Feld verlangt eine **öffentlich erreichbare Seite ohne Login**. Erledigt – diese URL eintragen:
 
-Drei Wege, in dieser Reihenfolge zu empfehlen:
+```
+https://grepvortex.github.io/dns64-browser-extension/privacy.html
+```
 
-1. **Kleines öffentliches Repo nur für Rechtstexte** (Mülltonne für Prüfer, Hauptcode bleibt privat):
-   Repo `dns64-extension-privacy` anlegen, `index.md` mit dem Text aus §8, Pages auf Branch `main`
-   /root aktivieren → URL `https://grepvortex.github.io/dns64-extension-privacy/`. Kostenlos, kein
-   Build, in zwei Minuten erledigt.
-2. **Haupt-Repo öffentlich schalten** und Pages dort aktivieren
-   (`https://grepvortex.github.io/dns64-browser-extension/privacy.html`) – nur, wenn der Code
-   öffentlich sein soll.
-3. **Öffentlicher Gist** mit dem Text – funktioniert, wird von Prüfern aber weniger gern gesehen als
-   eine echte Seite und ist nicht versioniert pflegbar.
+Quelle: `docs/privacy.html` im Repo, ausgeliefert über GitHub Pages (Branch `main`, Ordner `/docs`).
+Anonymer Abruf geprüft: HTTP 200, `text/html`, HTTPS erzwungen. Die Seite enthält die Erklärung aus
+§8 auf Deutsch und Englisch, ohne externe Ressourcen.
 
-Nicht geeignet: URL aus einem privaten Repo (404 für Prüfer), LAN-Adresse (z. B. der
-`brave-ext-store` auf Port 8115) oder ein Link auf einen Login.
+Wird der Text geändert: `docs/privacy.html` anpassen, committen, pushen – Pages baut in etwa einer
+Minute neu. Datum oben in der Seite mitziehen.
+
+Nicht geeignet und deshalb nicht verwendet: URL aus einem privaten Repo (404 für Prüfer), LAN-Adresse
+(z. B. der `brave-ext-store` auf Port 8115) oder ein Link auf einen Login.
 
 ---
 
@@ -267,11 +264,9 @@ no remote code is loaded.
 
 ---
 
-## 10. Offener Punkt
+## 10. Nach dem Absenden
 
-Die Datenschutzerklärung braucht eine öffentliche URL (§7). Sobald sie steht: URL hier eintragen und
-dieselbe URL in `README.md` verlinken, damit Nutzer sie auch außerhalb des Stores finden.
-
-```
-https://…
-```
+- Dieselbe URL in `README.md` und im Store-Eintrag verlinken, damit Nutzer sie außerhalb des Stores finden.
+- Bei jeder neuen Version: Passen die Antworten noch? Ändert sich eine Berechtigung, muss die
+  Begründung mit – sonst wird die Version abgelehnt.
+- `PRIVACY.md` und `PERMISSIONS.md` sind durch diese Datei ersetzt und können gelöscht werden.
