@@ -253,7 +253,12 @@ no remote code is loaded.
   Kurzfassung in `REVIEWER-NOTES.md` (481 Zeichen, englisch) mit Docker-Zeile, dem Pflichtschritt
   „DNS64-Modul unter Settings → Modules einschalten" (sonst 404) und dem Link auf den ausführlichen
   Prüf-Guide `https://grepvortex.github.io/dns64-browser-extension/reviewer.html`.
-- **Hostberechtigung weckt Argwohn.** `http://*/*` + `https://*/*` bei einer Erweiterung, die nur
+- **Hostberechtigung weckt Argwohn.** Das Dashboard warnt von sich aus („Erweiterte
+  Hostberechtigungen … gründlich überprüft"). Bewusst akzeptiert: die breiten Muster bleiben, dafür
+  ist die Begründung in §3.4 konkret und der Prüf-Guide erklärt die Notwendigkeit. Alternative für
+  später: `optional_host_permissions` plus `permissions.request()` auf genau die eingetragene
+  Adresse – kostet einen zusätzlichen Klick bei der Einrichtung, verkürzt die Prüfung.
+  Zusätzlich wichtig: `http://*/*` + `https://*/*` bei einer Erweiterung, die nur
   eine API anspricht, liest sich wie ein Datenabgriff. Deshalb ist die Begründung in §3.4 bewusst
   konkret („eine Adresse, die der Nutzer einträgt") – und im Feld **Testanweisungen** sollte
   `REVIEWER-NOTES.md` liegen, damit klar ist: ohne eigene Node zeigt die Erweiterung nur den
@@ -262,6 +267,10 @@ no remote code is loaded.
   Verweis auf die Node-Weboberfläche sind Teil der Bedienung, nicht ein zweiter Zweck).
 - **Kein Overreach im Code.** Keine `content_scripts`, kein `scripting`, kein `tabs` – das ist der
   stärkste Beleg für die Texte oben und sollte so bleiben.
+- **Entschieden am 7.11.2026: Hostberechtigung bleibt breit.** Der Dashboard-Hinweis „Erweiterte
+  Hostberechtigungen" trifft zu und wird bewusst in Kauf genommen (längere Prüfung). Der Umbau auf
+  `optional_host_permissions` + `chrome.permissions.request()` beim Einrichten wurde verworfen –
+  nicht erneut vorschlagen, solange keine Ablehnung vorliegt.
 - **Alternative, falls die Prüfung hängt:** Hostzugriff auf `optional_host_permissions` umstellen und
   erst beim Speichern der Node-Adresse per `chrome.permissions.request()` anfragen. Das kostet einen
   zusätzlichen Klick bei der Einrichtung und eine Code-Änderung, entfernt aber die pauschale
