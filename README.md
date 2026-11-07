@@ -44,9 +44,8 @@ Listen-Treffer.
 
 **Erlauben und Sperren nutzen ausschließlich die vorhandenen Endpunkte der Node** – dieselben,
 die auch das Webinterface benutzt. Beide Listen schließen sich serverseitig aus: wer eine
-Domain freigibt, fliegt aus der Sperrliste und umgekehrt. `/dns64/denylist` fehlt in der
-OpenAPI-Beschreibung, existiert aber (`GET`, `POST {domain}`, `DELETE ?domain=`) und wird von
-der Oberfläche (`/static/js/dns64.js`) verwendet.
+Domain freigibt, fliegt aus der Sperrliste und umgekehrt. Referenz der Node: `/api/docs`
+(HTML) und `/api/openapi.json` (maschinenlesbar).
 
 ## Installation (Brave/Chromium)
 

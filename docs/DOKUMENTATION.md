@@ -82,7 +82,8 @@ Gesamtgröße des Pakets: rund 100 KB (ohne Doku-Bilder).
 
 ## 3. API-Nutzung
 
-Alle zwölf im Code verwendeten Endpunkte sind in der OpenAPI der Node (1.2.0) beschrieben.
+Alle zwölf im Code verwendeten Endpunkte sind in der API-Referenz der Node beschrieben –
+HTML unter `/api/docs`, maschinenlesbar unter `/api/openapi.json` (API 1.2.0).
 Geprüft mit einem Skript, das die `api('…')`-Aufrufe aus dem Quelltext zieht und gegen
 `/api/openapi.json` hält – inklusive Feldtypen der Antworten.
 
