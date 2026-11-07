@@ -23,6 +23,7 @@ Kopieren für jedes Feld des Dashboards **und** die überarbeitete Datenschutzer
 | Datennutzung | **2 von 9 Kategorien anhaken** (§5) | wird öffentlich angezeigt |
 | Drei Bestätigungen | **alle drei anhaken** | Pflicht |
 | URL der Datenschutzerklärung | öffentliche URL (§7) | muss ohne Login erreichbar sein |
+| Testanweisungen | Text aus `REVIEWER-NOTES.md` | **500 Zeichen** – Kurzfassung dort oben |
 
 ---
 
@@ -248,6 +249,9 @@ no remote code is loaded.
 
 ## 9. Was Prüfer zusätzlich ansehen
 
+- **Testanweisungen sind auf 500 Zeichen begrenzt** und müssen ohne eigenen Server auskommen:
+  Kurzfassung mit Docker-Zeile in `REVIEWER-NOTES.md` (489 Zeichen, englisch), inklusive Prüfpfad und
+  dem Hinweis, dass Anfragen nur an die eingetragene Adresse gehen.
 - **Hostberechtigung weckt Argwohn.** `http://*/*` + `https://*/*` bei einer Erweiterung, die nur
   eine API anspricht, liest sich wie ein Datenabgriff. Deshalb ist die Begründung in §3.4 bewusst
   konkret („eine Adresse, die der Nutzer einträgt") – und im Feld **Testanweisungen** sollte

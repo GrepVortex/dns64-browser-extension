@@ -1,6 +1,33 @@
 # Anweisungen für die Prüfung (Feld „Test instructions")
 
-Copy this into the review field. It is in English because store reviewers read English.
+Das Dashboard-Feld erlaubt **500 Zeichen**. Die erste Fassung unten passt genau hinein (489 Zeichen),
+die deutsche Alternative ebenfalls (476). Englisch ist die sichere Wahl – Prüfer lesen Englisch.
+
+## Fassung für das Feld (Englisch, 489 Zeichen)
+
+```
+No backend, no account: the extension controls a self-hosted Node64 DNS server. Run one locally:
+docker run -d -p 8080:8080 ghcr.io/ipv64net/node64
+Open http://localhost:8080, create an API key (Settings, API keys), then click the extension icon, enter http://localhost:8080 plus the key, press "Speichern und testen".
+Check: state and 24h counters, pause toggle with countdown, domain card allows/denies the current site, badge ON/OFF/!. Traffic goes to that address only, no remote code.
+```
+
+## Fassung für das Feld (Deutsch, 476 Zeichen)
+
+```
+Kein eigener Server, keine Konten: die Erweiterung steuert eine selbst betriebene Node64-Instanz. Lokal starten:
+docker run -d -p 8080:8080 ghcr.io/ipv64net/node64
+http://localhost:8080 öffnen, unter Einstellungen einen API-Schlüssel anlegen, dann Symbol anklicken, Adresse und Schlüssel eintragen, "Speichern und testen".
+Prüfen: Zustand und 24-h-Kennzahlen, Pause mit Countdown, Domain-Karte erlaubt/sperrt die Seite, Abzeichen ON/OFF/!. Nur diese Adresse, kein Remote-Code.
+```
+
+Wenn bei einer neuen Version Zeichen übrig sind oder fehlen: erst die Klammer `(Settings, API keys)`
+und den Satz `Traffic goes to that address only, no remote code.` kürzen bzw. streichen – die
+Docker-Zeile und der Prüf-Pfad sind das Wertvollste am Text, weil ohne Node nichts testbar ist.
+
+---
+
+# Langfassung (passt nicht ins Feld, für Support und Nachfragen der Prüfer)
 
 ```
 TEST ACCOUNT / SERVER REQUIREMENTS
@@ -25,8 +52,8 @@ credentials required:
 4) Click the extension icon → the popup shows the setup form.
    Node address: http://localhost:8080
    API key:      the key from step 3
-   Press "Speichern und testen". Expected: "Verbunden mit DNS64 1.34.0" (version
-   may be newer) and the popup switches to the main view.
+   Press "Speichern und testen". Expected: "Verbunden mit DNS64 <version>" and the
+   popup switches to the main view.
 
 WHAT TO TEST
 
