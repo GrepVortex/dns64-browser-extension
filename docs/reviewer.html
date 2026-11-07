@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reviewer guide – DNS64 Browser Extension</title>
+<meta name="description" content="How to test the DNS64 Browser Extension: run a local Node64 instance, enable the DNS64 module, create an API key, and verify every feature.">
+<style>
+  :root {
+    color-scheme: light dark;
+    --fg: #1b1b1f;
+    --muted: #55555f;
+    --bg: #fdfdfc;
+    --rule: #e3e3e0;
+    --accent: #6d5ae6;
+    --card: #f6f5f2;
+    --ok: #17864a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fg: #ececf1;
+      --muted: #a5a5b0;
+      --bg: #16161a;
+      --rule: #2c2c33;
+      --accent: #a99bff;
+      --card: #1e1e24;
+      --ok: #4ad08a;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 3rem 1.25rem 5rem;
+    background: var(--bg);
+    color: var(--fg);
+    font: 16px/1.65 -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  main { max-width: 48rem; margin: 0 auto; }
+  h1 { font-size: 1.7rem; line-height: 1.25; margin: 0 0 .35rem; letter-spacing: -.01em; }
+  h2 { font-size: 1.15rem; margin: 2.6rem 0 .7rem; padding-top: 1.2rem; border-top: 1px solid var(--rule); }
+  h2:first-of-type { border-top: 0; padding-top: 0; }
+  h3 { font-size: 1rem; margin: 1.6rem 0 .4rem; }
+  .sub { color: var(--muted); font-size: .9rem; margin: 0 0 2rem; }
+  p { margin: .7rem 0; }
+  ol, ul { margin: .7rem 0; padding-left: 1.3rem; }
+  li { margin: .45rem 0; }
+  code, pre {
+    font: .9em/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  code {
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: .1em .35em;
+    overflow-wrap: anywhere;
+  }
+  pre {
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: .8rem 1rem;
+    overflow-x: auto;
+    margin: .8rem 0;
+  }
+  pre code { background: none; border: 0; padding: 0; }
+  .note { background: var(--card); border-left: 3px solid var(--accent); border-radius: 0 6px 6px 0; padding: .85rem 1rem; margin: 1.4rem 0; }
+  .warn { border-left-color: #c2410c; }
+  a { color: var(--accent); }
+  a:hover { text-decoration: none; }
+  .top { font-size: .85rem; color: var(--muted); margin-bottom: 2rem; }
+  table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: .94rem; }
+  th, td { text-align: left; vertical-align: top; padding: .45rem .6rem; border-bottom: 1px solid var(--rule); }
+  th { color: var(--muted); font-weight: 600; font-size: .85rem; text-transform: uppercase; letter-spacing: .03em; }
+  .ok { color: var(--ok); font-weight: 600; }
+</style>
+</head>
+<body>
+<main>
+
+<div class="top"><a href="https://github.com/GrepVortex/dns64-browser-extension">DNS64 Browser Extension</a> · <a href="privacy.html">Privacy policy</a></div>
+
+<h1>Reviewer guide</h1>
+<p class="sub">DNS64 Browser Extension 1.4.4 · how to set up a test server and verify every feature · ~10 minutes</p>
+
+<div class="note">
+  <strong>Short version.</strong> The extension has no backend and no account system. It is a remote control for the
+  DNS64 blocklists of a <strong>Node64</strong> instance the user runs themselves. Without such an instance the popup
+  shows its setup form – that is the expected state, nothing is broken.
+</div>
+
+<h2>1. Run a Node64 instance</h2>
+<p><a href="https://github.com/ipv64net/node64">Node64</a> is an open-source DNS server for home networks
+(Apache-2.0, amd64 and arm64). One container is enough; no account, no credentials, no paid tier:</p>
+<pre><code>docker run -d --name node64 -p 8080:8080 -v node64-data:/data ghcr.io/ipv64net/node64:latest</code></pre>
+<p>The image is also on Docker Hub as <code>x64gmbh/node64</code>. The web UI answers on
+<code>http://localhost:8080</code>; the first-run assistant asks for a language and an admin account – pick any
+password you like, there is no default one.</p>
+
+<h2>2. Enable the DNS64 module</h2>
+<div class="note warn">
+  <strong>Do not skip this step.</strong> DNS64 is a module inside Node64 and ships <strong>switched off</strong>.
+  While it is off, nothing runs and the extension's API calls return <strong>404</strong> – the popup would show
+  “DNS64-Modul aus” instead of data.
+</div>
+<ol>
+  <li>In Node64 open <em>Settings → Modules</em> and switch <strong>DNS64</strong> on.</li>
+  <li>Nothing else is required: the module starts with its default blocklists and default upstreams, and the
+      overview under <em>DNS64 → Overview</em> shows the running service.</li>
+  <li>Optional, only to produce traffic: point a test device (or your OS resolver) at the container's IP on
+      port 53 and browse a few sites – then the query log and the counters have data.</li>
+</ol>
+
+<h2>3. Create an API key</h2>
+<p>In Node64 open <em>Settings → API keys</em>, create a key (any name, e.g. “review”). It is shown once and starts
+with <code>node64_</code>. The key belongs to the node, not to the extension.</p>
+
+<h2>4. Set up the extension</h2>
+<ol>
+  <li>Click the extension icon. The popup shows a setup form with both fields empty.</li>
+  <li>Node address: <code>http://localhost:8080</code> · API key: the key from step 3.</li>
+  <li>Press <em>Speichern und testen</em>. Expected message: <span class="ok">“Verbunden mit DNS64 &lt;version&gt;”</span>,
+      then the popup switches to the main view.</li>
+</ol>
+
+<h2>5. What to verify</h2>
+<table>
+  <thead>
+    <tr><th>Feature</th><th>How to test / expected</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Main view</td>
+      <td>Blocking state, counters for the last 24 h (queries, blocked, clients, ratio), footer with DNS64 and extension version.</td>
+    </tr>
+    <tr>
+      <td>Pause / resume</td>
+      <td>The switch at the top pauses blocking until you re-enable it; the buttons <code>1m</code> <code>5m</code>
+        <code>30m</code> <code>1h</code> <code>∞</code> and <code>…</code> (custom 1–1440 min) pause for that period and
+        the popup shows a live countdown. The state is written to the local node.</td>
+    </tr>
+    <tr>
+      <td>Domain card</td>
+      <td>Open any site (e.g. <code>https://example.com</code>) and click the icon: it shows that domain's status.
+        <em>Erlauben</em> adds it to the node's allowlist, <em>Sperren</em> to its own blocklist; pressing again removes it.
+        Both are visible in the node UI under <em>DNS64 → Allowlist</em> / <em>Own blocklist</em>.</td>
+    </tr>
+    <tr>
+      <td>Toolbar badge</td>
+      <td><code>ON</code> green while blocking is active, <code>OFF</code> amber while paused, <code>!</code> red when the
+        node is unreachable or the key is wrong (<code>docker stop node64</code> reproduces it).</td>
+    </tr>
+    <tr>
+      <td>Options page</td>
+      <td>Gear icon → same address and key, theme setting, connection test. Theme follows the browser's light/dark mode.</td>
+    </tr>
+    <tr>
+      <td>Permissions in use</td>
+      <td><code>storage</code> (settings), <code>alarms</code> (badge refresh every minute), <code>activeTab</code>
+        (hostname of the active tab, only after a click) and host access to the address entered in step 4.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>6. What the extension does not do</h2>
+<ul>
+  <li><strong>No remote code.</strong> Everything is in the package: no <code>eval</code>, no script tags to external
+      files, no dynamically loaded modules.</li>
+  <li><strong>No content scripts, no page reading.</strong> The manifest contains no <code>content_scripts</code> and no
+      <code>scripting</code> permission; only the active tab's hostname is read, after a click on the icon.</li>
+  <li><strong>No third-party servers.</strong> Every request goes to the address entered in step 4, and only to these
+      endpoints: <code>/api/dns64/status</code>, <code>/summary</code>, <code>/log</code>, <code>/allowlist</code>,
+      <code>/denylist</code>, <code>/records</code>, <code>/pause</code>, <code>/resume</code>. DevTools → Network shows
+      nothing else.</li>
+  <li><strong>No telemetry, no analytics, no accounts, no ads.</strong> The API key stays in
+      <code>chrome.storage.local</code> and is never synced.</li>
+</ul>
+
+<h2>7. Notes</h2>
+<ul>
+  <li>The UI language is German; the store listing says so. Buttons: <em>Erlauben</em> = allow, <em>Sperren</em> = block,
+      <em>Speichern und testen</em> = save and test.</li>
+  <li>Developer shortcut for the domain card without browsing: <code>popup.html?site=example.com</code>.</li>
+  <li>Pauses and allow/deny entries apply node-wide, not per device.</li>
+  <li>Contact: <a href="https://github.com/GrepVortex">github.com/GrepVortex</a></li>
+</ul>
+
+</main>
+</body>
+</html>

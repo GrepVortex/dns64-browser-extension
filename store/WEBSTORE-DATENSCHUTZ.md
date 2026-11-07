@@ -250,8 +250,9 @@ no remote code is loaded.
 ## 9. Was Prüfer zusätzlich ansehen
 
 - **Testanweisungen sind auf 500 Zeichen begrenzt** und müssen ohne eigenen Server auskommen:
-  Kurzfassung mit Docker-Zeile in `REVIEWER-NOTES.md` (489 Zeichen, englisch), inklusive Prüfpfad und
-  dem Hinweis, dass Anfragen nur an die eingetragene Adresse gehen.
+  Kurzfassung in `REVIEWER-NOTES.md` (481 Zeichen, englisch) mit Docker-Zeile, dem Pflichtschritt
+  „DNS64-Modul unter Settings → Modules einschalten" (sonst 404) und dem Link auf den ausführlichen
+  Prüf-Guide `https://grepvortex.github.io/dns64-browser-extension/reviewer.html`.
 - **Hostberechtigung weckt Argwohn.** `http://*/*` + `https://*/*` bei einer Erweiterung, die nur
   eine API anspricht, liest sich wie ein Datenabgriff. Deshalb ist die Begründung in §3.4 bewusst
   konkret („eine Adresse, die der Nutzer einträgt") – und im Feld **Testanweisungen** sollte
