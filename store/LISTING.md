@@ -8,13 +8,13 @@ DNS64 Browser Extension
 
 ## Feld „Kurzbeschreibung / Summary" (max. 132 Zeichen)
 
-Deutsch (124 Zeichen):
+Deutsch (121 Zeichen):
 
 ```
 Blocklisten von DNS64 (Node64) im Browser schalten: pausieren, Domain freigeben oder sperren – mit Status und Kennzahlen.
 ```
 
-Englisch (113 Zeichen):
+Englisch (102 Zeichen):
 
 ```
 Switch DNS64 (Node64) blocklists from the browser: pause blocking, allow or block a domain, see stats.
