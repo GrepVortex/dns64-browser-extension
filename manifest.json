@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "DNS64 Browser Extension",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "description": "Blocklisten von DNS64 (Node64) schalten, Domains freigeben oder sperren.",
   "action": {
     "default_title": "DNS64 Browser Extension",

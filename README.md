@@ -114,7 +114,7 @@ wenn Brave-Theme und Systemeinstellung auseinanderlaufen.
 
 ## Lizenz
 
-Apache License 2.0 – vollständiger Text in [`LICENSE.md`](LICENSE.md), Copyright 2026 badguy2003st.
+Apache License 2.0 – vollständiger Text in [`LICENSE.md`](LICENSE.md), Copyright 2026 GrepVortex.
 Das Node64-Logo in `icons/` stammt aus dem Node64-Projekt (Apache-2.0) und bleibt Eigentum der
 Prox IT UG / ipv64.net; Herkunft und Abgrenzung in [`NOTICE.md`](NOTICE.md).
 Die Erweiterung ist nicht Teil von Node64.

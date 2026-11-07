@@ -300,6 +300,6 @@ python3 api-check.py <openapi-live.json> node64_…
 - Die Ziffern der Kachel sind transparent (kein weißer Grund), damit sie die Farbe der Leiste
   annehmen – hell im hellen, dunkel im dunklen Modus.
 - **Quelltext dieser Erweiterung:** Apache License 2.0 (Text in `LICENSE.md`,
-  Copyright 2026 badguy2003st). Eigenständig entstanden, nicht Teil von Node64, weder von
+  Copyright 2026 GrepVortex). Eigenständig entstanden, nicht Teil von Node64, weder von
   ipv64.net noch von der Prox IT UG herausgegeben. Details in `NOTICE.md`.
 - Marken- und Namensnennungen (Node64, ipv64.net) dienen nur der Beschreibung der Kompatibilität.

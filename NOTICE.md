@@ -18,7 +18,7 @@ Lizenz dieser Erweiterung
 Der Quelltext dieser Erweiterung (manifest.json, *.html, *.js, *.css, Build-Skript)
 steht unter der Apache License 2.0 – vollständiger Text in LICENSE.md.
 
-  Copyright 2026 badguy2003st
+  Copyright 2026 GrepVortex
 
 Diese Erweiterung ist nicht Teil von Node64 und wird weder von ipv64.net noch von
 der Prox IT UG herausgegeben.
