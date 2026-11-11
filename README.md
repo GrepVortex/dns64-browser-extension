@@ -47,6 +47,14 @@ die auch das Webinterface benutzt. Beide Listen schließen sich serverseitig aus
 Domain freigibt, fliegt aus der Sperrliste und umgekehrt. Referenz der Node: `/api/docs`
 (HTML) und `/api/openapi.json` (maschinenlesbar).
 
+## Homepage und Store
+
+- Homepage (GitHub Pages): <https://grepvortex.github.io/dns64-browser-extension/>
+- Chrome Web Store: <https://chromewebstore.google.com/detail/dns64-browser-extension/fnolfhpfonkjefmlbpcanncdnliadhpe>
+- Die Unterseiten der Homepage (`docs/dokumentation.html`, `datenschutz.html`, `lizenz.html`) werden
+  aus den Markdown-Quellen erzeugt: `python3 docs/_build.py` (Quellen: `docs/DOKUMENTATION.md`,
+  `store/PRIVACY.md`, `NOTICE.md`, `LICENSE.md`). `docs/index.html` ist handgeschrieben.
+
 ## Installation (Brave/Chromium)
 
 ### A) Entpackt laden (schnell, 3 Klicks)

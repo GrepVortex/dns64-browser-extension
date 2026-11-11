@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lizenz und Herkunft – DNS64 Browser Extension</title>
+<meta name="description" content="Lizenzhinweise der Erweiterung: Apache-2.0 für den Quellcode, Herkunft und Rechte am Node64-Logo, Abgrenzung zum Projekt Node64.">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="canonical" href="https://grepvortex.github.io/dns64-browser-extension/lizenz.html">
+<style>
+  :root {
+    color-scheme: light dark;
+    --fg: #1b1b1f; --muted: #55555f; --bg: #fdfdfc; --rule: #e3e3e0;
+    --accent: #6d5ae6; --card: #f6f5f2;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fg: #ececf1; --muted: #a5a5b0; --bg: #16161a; --rule: #2c2c33;
+      --accent: #a99bff; --card: #1e1e24;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--bg); color: var(--fg);
+    font: 16px/1.65 -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  a { color: var(--accent); }
+  a:hover { text-decoration: none; }
+  header.site { border-bottom: 1px solid var(--rule); }
+  header.site .bar { max-width: 62rem; margin: 0 auto; padding: .9rem 1.25rem;
+    display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+  .brand { display: flex; align-items: center; gap: .6rem; font-weight: 600; letter-spacing: -.01em; }
+  .brand img { width: 28px; height: 28px; border-radius: 6px; }
+  .brand span { font-weight: 400; color: var(--muted); }
+  nav.top { margin-left: auto; display: flex; gap: 1.1rem; font-size: .92rem; flex-wrap: wrap; }
+  nav.top a { color: var(--muted); text-decoration: none; }
+  nav.top a:hover, nav.top a[aria-current] { color: var(--fg); }
+  main { max-width: 46rem; margin: 0 auto; padding: 2.6rem 1.25rem 5rem; }
+  h1 { font-size: 1.7rem; line-height: 1.25; margin: 0 0 .35rem; letter-spacing: -.01em; }
+  h2 { font-size: 1.15rem; margin: 2.5rem 0 .6rem; }
+  h3 { font-size: 1rem; margin: 1.8rem 0 .4rem; }
+  p, ul, ol { margin: .7rem 0; }
+  ul, ol { padding-left: 1.25rem; }
+  li { margin: .25rem 0; }
+  code {
+    font: .9em/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    background: var(--card); border: 1px solid var(--rule); border-radius: 4px; padding: .1em .35em;
+  }
+  pre {
+    background: var(--card); border: 1px solid var(--rule); border-radius: 8px;
+    padding: .85rem 1rem; overflow-x: auto; font-size: .86rem; line-height: 1.5;
+  }
+  pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+  blockquote { margin: 1rem 0; padding: .6rem 1rem; border-left: 3px solid var(--accent);
+    background: var(--card); border-radius: 0 6px 6px 0; color: var(--muted); }
+  table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: .94rem; }
+  th, td { text-align: left; vertical-align: top; padding: .5rem .6rem; border-bottom: 1px solid var(--rule); }
+  th { color: var(--muted); font-weight: 600; font-size: .85rem; text-transform: uppercase; letter-spacing: .03em; }
+  hr { border: 0; border-top: 1px solid var(--rule); margin: 2.4rem 0; }
+  .lead { color: var(--muted); margin: 0 0 2rem; }
+  footer.site { border-top: 1px solid var(--rule); padding: 1.6rem 1.25rem 3rem
+    ; color: var(--muted); font-size: .86rem; }
+  footer.site .bar { max-width: 46rem; margin: 0 auto; display: flex; gap: 1.1rem; flex-wrap: wrap; }
+  footer.site a { color: var(--muted); }
+  footer.site a:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+<header class="site"><div class="bar">
+    <div class="brand"><a href="./" style="display:flex;align-items:center;gap:.6rem;color:inherit;text-decoration:none">
+      <img src="favicon.png" alt="">DNS64<span>Browser Extension</span></a></div>
+    <nav class="top">
+      <a href="./">Start</a>
+      <a href="dokumentation.html">Dokumentation</a>
+      <a href="datenschutz.html">Datenschutz</a>
+      <a href="lizenz.html" aria-current="page">Lizenz</a>
+      <a href="https://github.com/GrepVortex/dns64-browser-extension">GitHub&nbsp;↗</a>
+    </nav>
+</div></header>
+<main>
+<h1>Lizenz und Herkunft</h1>
+<p class="lead">Die Erweiterung steht unter Apache-2.0. Das Symbol stammt vom Node64-Logo und
+bleibt Eigentum der Prox IT UG.</p>
+<div class="note" style="background:var(--card);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;padding:.85rem 1rem;margin:1.4rem 0">
+  <b>Kurzfassung:</b> Du darfst die Erweiterung nutzen, ändern und weitergeben – auch kommerziell.
+  Bedingung: Copyright- und Lizenzhinweis beibehalten und Änderungen kennzeichnen. Es gibt keine
+  Gewährleistung. Der Name <i>Node64</i> und das Logo der Node64 sind nicht Teil dieser Lizenz.
+</div>
+<p>DNS64 Browser Extension – Hinweise zu Herkunft und Lizenz</p>
+<p>Symbol / Logo
+─────────────
+Die Dateien in icons/ (icon16/32/48/128/512.png, node64-mark.png) sind aus dem
+Logo von Node64 abgeleitet:
+  https://github.com/ipv64net/node64
+  Datei im Projekt: static/img/node64.svg (Kachel „64") bzw. favicon.png
+Lizenz: Apache License 2.0 (Text in LICENSE.md).</p>
+<p>Das Logo bleibt Eigentum der Prox IT UG / ipv64.net; es wird hier nur zur
+Kennzeichnung dieser Erweiterung für dieselbe Software verwendet. Marken- und
+Namensnennungen (Node64, ipv64.net) dienen ausschließlich der Beschreibung der
+Kompatibilität.</p>
+<p>Lizenz dieser Erweiterung
+─────────────────────────
+Der Quelltext dieser Erweiterung (manifest.json, <em>.html, </em>.js, *.css, Build-Skript)
+steht unter der Apache License 2.0 – vollständiger Text in LICENSE.md.</p>
+<p>Copyright 2026 GrepVortex</p>
+<p>Diese Erweiterung ist nicht Teil von Node64 und wird weder von ipv64.net noch von
+der Prox IT UG herausgegeben.</p>
+<hr>
+<h2>Apache License 2.0</h2>
+<pre><code>                             Apache License
+                       Version 2.0, January 2004
+                    http://www.apache.org/licenses/
+</code></pre>
+<p>TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION</p>
+<ol>
+<li>
+<p>Definitions.</p>
+<p>"License" shall mean the terms and conditions for use, reproduction,
+  and distribution as defined by Sections 1 through 9 of this document.</p>
+<p>"Licensor" shall mean the copyright owner or entity authorized by
+  the copyright owner that is granting the License.</p>
+<p>"Legal Entity" shall mean the union of the acting entity and all
+  other entities that control, are controlled by, or are under common
+  control with that entity. For the purposes of this definition,
+  "control" means (i) the power, direct or indirect, to cause the
+  direction or management of such entity, whether by contract or
+  otherwise, or (ii) ownership of fifty percent (50%) or more of the
+  outstanding shares, or (iii) beneficial ownership of such entity.</p>
+<p>"You" (or "Your") shall mean an individual or Legal Entity
+  exercising permissions granted by this License.</p>
+<p>"Source" form shall mean the preferred form for making modifications,
+  including but not limited to software source code, documentation
+  source, and configuration files.</p>
+<p>"Object" form shall mean any form resulting from mechanical
+  transformation or translation of a Source form, including but
+  not limited to compiled object code, generated documentation,
+  and conversions to other media types.</p>
+<p>"Work" shall mean the work of authorship, whether in Source or
+  Object form, made available under the License, as indicated by a
+  copyright notice that is included in or attached to the work
+  (an example is provided in the Appendix below).</p>
+<p>"Derivative Works" shall mean any work, whether in Source or Object
+  form, that is based on (or derived from) the Work and for which the
+  editorial revisions, annotations, elaborations, or other modifications
+  represent, as a whole, an original work of authorship. For the purposes
+  of this License, Derivative Works shall not include works that remain
+  separable from, or merely link (or bind by name) to the interfaces of,
+  the Work and Derivative Works thereof.</p>
+<p>"Contribution" shall mean any work of authorship, including
+  the original version of the Work and any modifications or additions
+  to that Work or Derivative Works thereof, that is intentionally
+  submitted to Licensor for inclusion in the Work by the copyright owner
+  or by an individual or Legal Entity authorized to submit on behalf of
+  the copyright owner. For the purposes of this definition, "submitted"
+  means any form of electronic, verbal, or written communication sent
+  to the Licensor or its representatives, including but not limited to
+  communication on electronic mailing lists, source code control systems,
+  and issue tracking systems that are managed by, or on behalf of, the
+  Licensor for the purpose of discussing and improving the Work, but
+  excluding communication that is conspicuously marked or otherwise
+  designated in writing by the copyright owner as "Not a Contribution."</p>
+<p>"Contributor" shall mean Licensor and any individual or Legal Entity
+  on behalf of whom a Contribution has been received by Licensor and
+  subsequently incorporated within the Work.</p>
+</li>
+<li>
+<p>Grant of Copyright License. Subject to the terms and conditions of
+      this License, each Contributor hereby grants to You a perpetual,
+      worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+      copyright license to reproduce, prepare Derivative Works of,
+      publicly display, publicly perform, sublicense, and distribute the
+      Work and such Derivative Works in Source or Object form.</p>
+</li>
+<li>
+<p>Grant of Patent License. Subject to the terms and conditions of
+      this License, each Contributor hereby grants to You a perpetual,
+      worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+      (except as stated in this section) patent license to make, have made,
+      use, offer to sell, sell, import, and otherwise transfer the Work,
+      where such license applies only to those patent claims licensable
+      by such Contributor that are necessarily infringed by their
+      Contribution(s) alone or by combination of their Contribution(s)
+      with the Work to which such Contribution(s) was submitted. If You
+      institute patent litigation against any entity (including a
+      cross-claim or counterclaim in a lawsuit) alleging that the Work
+      or a Contribution incorporated within the Work constitutes direct
+      or contributory patent infringement, then any patent licenses
+      granted to You under this License for that Work shall terminate
+      as of the date such litigation is filed.</p>
+</li>
+<li>
+<p>Redistribution. You may reproduce and distribute copies of the
+      Work or Derivative Works thereof in any medium, with or without
+      modifications, and in Source or Object form, provided that You
+      meet the following conditions:</p>
+<p>(a) You must give any other recipients of the Work or
+      Derivative Works a copy of this License; and</p>
+<p>(b) You must cause any modified files to carry prominent notices
+      stating that You changed the files; and</p>
+<p>(c) You must retain, in the Source form of any Derivative Works
+      that You distribute, all copyright, patent, trademark, and
+      attribution notices from the Source form of the Work,
+      excluding those notices that do not pertain to any part of
+      the Derivative Works; and</p>
+<p>(d) If the Work includes a "NOTICE" text file as part of its
+      distribution, then any Derivative Works that You distribute must
+      include a readable copy of the attribution notices contained
+      within such NOTICE file, excluding those notices that do not
+      pertain to any part of the Derivative Works, in at least one
+      of the following places: within a NOTICE text file distributed
+      as part of the Derivative Works; within the Source form or
+      documentation, if provided along with the Derivative Works; or,
+      within a display generated by the Derivative Works, if and
+      wherever such third-party notices normally appear. The contents
+      of the NOTICE file are for informational purposes only and
+      do not modify the License. You may add Your own attribution
+      notices within Derivative Works that You distribute, alongside
+      or as an addendum to the NOTICE text from the Work, provided
+      that such additional attribution notices cannot be construed
+      as modifying the License.</p>
+<p>You may add Your own copyright statement to Your modifications and
+  may provide additional or different license terms and conditions
+  for use, reproduction, or distribution of Your modifications, or
+  for any such Derivative Works as a whole, provided Your use,
+  reproduction, and distribution of the Work otherwise complies with
+  the conditions stated in this License.</p>
+</li>
+<li>
+<p>Submission of Contributions. Unless You explicitly state otherwise,
+      any Contribution intentionally submitted for inclusion in the Work
+      by You to the Licensor shall be under the terms and conditions of
+      this License, without any additional terms or conditions.
+      Notwithstanding the above, nothing herein shall supersede or modify
+      the terms of any separate license agreement you may have executed
+      with Licensor regarding such Contributions.</p>
+</li>
+<li>
+<p>Trademarks. This License does not grant permission to use the trade
+      names, trademarks, service marks, or product names of the Licensor,
+      except as required for reasonable and customary use in describing the
+      origin of the Work and reproducing the content of the NOTICE file.</p>
+</li>
+<li>
+<p>Disclaimer of Warranty. Unless required by applicable law or
+      agreed to in writing, Licensor provides the Work (and each
+      Contributor provides its Contributions) on an "AS IS" BASIS,
+      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+      implied, including, without limitation, any warranties or conditions
+      of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A
+      PARTICULAR PURPOSE. You are solely responsible for determining the
+      appropriateness of using or redistributing the Work and assume any
+      risks associated with Your exercise of permissions under this License.</p>
+</li>
+<li>
+<p>Limitation of Liability. In no event and under no legal theory,
+      whether in tort (including negligence), contract, or otherwise,
+      unless required by applicable law (such as deliberate and grossly
+      negligent acts) or agreed to in writing, shall any Contributor be
+      liable to You for damages, including any direct, indirect, special,
+      incidental, or consequential damages of any character arising as a
+      result of this License or out of the use or inability to use the
+      Work (including but not limited to damages for loss of goodwill,
+      work stoppage, computer failure or malfunction, or any and all
+      other commercial damages or losses), even if such Contributor
+      has been advised of the possibility of such damages.</p>
+</li>
+<li>
+<p>Accepting Warranty or Additional Liability. While redistributing
+      the Work or Derivative Works thereof, You may choose to offer,
+      and charge a fee for, acceptance of support, warranty, indemnity,
+      or other liability obligations and/or rights consistent with this
+      License. However, in accepting such obligations, You may act only
+      on Your own behalf and on Your sole responsibility, not on behalf
+      of any other Contributor, and only if You agree to indemnify,
+      defend, and hold each Contributor harmless for any liability
+      incurred by, or claims asserted against, such Contributor by reason
+      of your accepting any such warranty or additional liability.</p>
+</li>
+</ol>
+<p>END OF TERMS AND CONDITIONS</p>
+<p>APPENDIX: How to apply the Apache License to your work.</p>
+<pre><code>  To apply the Apache License to your work, attach the following
+  boilerplate notice, with the fields enclosed by brackets "[]"
+  replaced with your own identifying information. (Don't include
+  the brackets!)  The text should be enclosed in the appropriate
+  comment syntax for the file format. We also recommend that a
+  file or class name and description of purpose be included on the
+  same "printed page" as the copyright notice for easier
+  identification within third-party archives.
+</code></pre>
+<p>Copyright [yyyy] [name of copyright owner]</p>
+<p>Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at</p>
+<pre><code>   http://www.apache.org/licenses/LICENSE-2.0
+</code></pre>
+<p>Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.</p>
+<hr>
+<p>Copyright 2026 GrepVortex</p>
+<p>Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at</p>
+<pre><code>   http://www.apache.org/licenses/LICENSE-2.0
+</code></pre>
+<p>Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.</p>
+</main>
+<footer class="site"><div class="bar">
+  <a href="./">Start</a><a href="dokumentation.html">Dokumentation</a>
+  <a href="datenschutz.html">Datenschutz</a><a href="lizenz.html">Lizenz &amp; Herkunft</a>
+  <a href="https://github.com/GrepVortex/dns64-browser-extension">Quellcode</a>
+</div></footer>
+</body>
+</html>

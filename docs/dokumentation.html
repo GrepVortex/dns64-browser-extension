@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dokumentation – DNS64 Browser Extension</title>
+<meta name="description" content="Technische Dokumentation der Erweiterung: Funktionsumfang, Architektur, genutzte API-Endpunkte, Berechtigungen, Hell/Dunkel-Umschaltung und Testprotokoll.">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="canonical" href="https://grepvortex.github.io/dns64-browser-extension/dokumentation.html">
+<style>
+  :root {
+    color-scheme: light dark;
+    --fg: #1b1b1f; --muted: #55555f; --bg: #fdfdfc; --rule: #e3e3e0;
+    --accent: #6d5ae6; --card: #f6f5f2;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fg: #ececf1; --muted: #a5a5b0; --bg: #16161a; --rule: #2c2c33;
+      --accent: #a99bff; --card: #1e1e24;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--bg); color: var(--fg);
+    font: 16px/1.65 -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  a { color: var(--accent); }
+  a:hover { text-decoration: none; }
+  header.site { border-bottom: 1px solid var(--rule); }
+  header.site .bar { max-width: 62rem; margin: 0 auto; padding: .9rem 1.25rem;
+    display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+  .brand { display: flex; align-items: center; gap: .6rem; font-weight: 600; letter-spacing: -.01em; }
+  .brand img { width: 28px; height: 28px; border-radius: 6px; }
+  .brand span { font-weight: 400; color: var(--muted); }
+  nav.top { margin-left: auto; display: flex; gap: 1.1rem; font-size: .92rem; flex-wrap: wrap; }
+  nav.top a { color: var(--muted); text-decoration: none; }
+  nav.top a:hover, nav.top a[aria-current] { color: var(--fg); }
+  main { max-width: 46rem; margin: 0 auto; padding: 2.6rem 1.25rem 5rem; }
+  h1 { font-size: 1.7rem; line-height: 1.25; margin: 0 0 .35rem; letter-spacing: -.01em; }
+  h2 { font-size: 1.15rem; margin: 2.5rem 0 .6rem; }
+  h3 { font-size: 1rem; margin: 1.8rem 0 .4rem; }
+  p, ul, ol { margin: .7rem 0; }
+  ul, ol { padding-left: 1.25rem; }
+  li { margin: .25rem 0; }
+  code {
+    font: .9em/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    background: var(--card); border: 1px solid var(--rule); border-radius: 4px; padding: .1em .35em;
+  }
+  pre {
+    background: var(--card); border: 1px solid var(--rule); border-radius: 8px;
+    padding: .85rem 1rem; overflow-x: auto; font-size: .86rem; line-height: 1.5;
+  }
+  pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+  blockquote { margin: 1rem 0; padding: .6rem 1rem; border-left: 3px solid var(--accent);
+    background: var(--card); border-radius: 0 6px 6px 0; color: var(--muted); }
+  table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: .94rem; }
+  th, td { text-align: left; vertical-align: top; padding: .5rem .6rem; border-bottom: 1px solid var(--rule); }
+  th { color: var(--muted); font-weight: 600; font-size: .85rem; text-transform: uppercase; letter-spacing: .03em; }
+  hr { border: 0; border-top: 1px solid var(--rule); margin: 2.4rem 0; }
+  .lead { color: var(--muted); margin: 0 0 2rem; }
+  footer.site { border-top: 1px solid var(--rule); padding: 1.6rem 1.25rem 3rem
+    ; color: var(--muted); font-size: .86rem; }
+  footer.site .bar { max-width: 46rem; margin: 0 auto; display: flex; gap: 1.1rem; flex-wrap: wrap; }
+  footer.site a { color: var(--muted); }
+  footer.site a:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+<header class="site"><div class="bar">
+    <div class="brand"><a href="./" style="display:flex;align-items:center;gap:.6rem;color:inherit;text-decoration:none">
+      <img src="favicon.png" alt="">DNS64<span>Browser Extension</span></a></div>
+    <nav class="top">
+      <a href="./">Start</a>
+      <a href="dokumentation.html" aria-current="page">Dokumentation</a>
+      <a href="datenschutz.html">Datenschutz</a>
+      <a href="lizenz.html">Lizenz</a>
+      <a href="https://github.com/GrepVortex/dns64-browser-extension">GitHub&nbsp;↗</a>
+    </nav>
+</div></header>
+<main>
+<h1>DNS64 Browser Extension – Dokumentation</h1><p class="lead">Funktionsumfang, Architektur, genutzte API-Endpunkte, Sicherheit, Testprotokoll und Lizenzen – die technische Beschreibung der Erweiterung.</p><p>Chromium-/Brave-Erweiterung (Manifest V3) für <strong>Node64</strong>: Blocklisten des DNS64-Moduls
+schalten, die aktuelle Domain freigeben oder sperren – ohne die Weboberfläche zu öffnen.
+Vorbild ist die Pi-hole-Browser-Erweiterung, umgesetzt gegen die offizielle lokale API
+von Node64.</p>
+<ul>
+<li>Stand: <strong>1.4.0</strong> (07.11.2026)</li>
+<li>Getestet mit Chromium 155 und Brave 156, Node64 1.34.0 (DNS64-Modul 1.34.0), API 1.2.0</li>
+<li>Kein externer Dienst, keine Telemetrie, keine Fremd-Hosts: alles läuft zwischen
+  Browser und der eingetragenen Node.</li>
+</ul>
+<hr>
+<h2>1. Funktionsumfang</h2>
+<table>
+<thead>
+<tr>
+<th>Bedienelement</th>
+<th>Wirkung</th>
+<th>Endpunkt</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Schalter oben</td>
+<td>Blockieren an/aus; „aus" = bis zum manuellen Wiedereinschalten</td>
+<td><code>POST /dns64/pause {minutes:0}</code>, <code>POST /dns64/resume</code></td>
+</tr>
+<tr>
+<td><code>1m</code> <code>5m</code> <code>30m</code> <code>1h</code> <code>∞</code> <code>…</code></td>
+<td>Blockieren für 1/5/30/60 Minuten, unbegrenzt oder eigene Dauer (1–1440) pausieren</td>
+<td><code>POST /dns64/pause {minutes}</code></td>
+</tr>
+<tr>
+<td>Kennzahlenzeile</td>
+<td>Abfragen, blockiert, Clients, Quote der letzten 24 h</td>
+<td><code>GET /dns64/summary?range=24h</code></td>
+</tr>
+<tr>
+<td>Domain-Karte</td>
+<td>Status der aktiven Seite samt Blockliste und Trefferzahl im Log</td>
+<td><code>GET /dns64/log</code>, <code>/dns64/allowlist</code>, <code>/dns64/denylist</code>, <code>/dns64/records</code></td>
+</tr>
+<tr>
+<td><strong>Erlauben</strong> (A)</td>
+<td>Domain in die Freigabeliste (gilt samt Subdomains); hebt eine eigene Sperre für denselben Namen auf</td>
+<td><code>POST /dns64/allowlist {domain}</code>, <code>DELETE ?domain=</code></td>
+</tr>
+<tr>
+<td><strong>Sperren</strong> (D)</td>
+<td>Domain in die eigene Sperrliste der Node (gilt samt Subdomains); hebt eine Freigabe für denselben Namen auf</td>
+<td><code>POST /dns64/denylist {domain}</code>, <code>DELETE ?domain=</code></td>
+</tr>
+<tr>
+<td><code>10 min pausieren</code></td>
+<td>Kurzpause aller Listen</td>
+<td><code>POST /dns64/pause {minutes:10}</code></td>
+</tr>
+<tr>
+<td><code>In Node64 öffnen</code></td>
+<td>Weboberfläche der Node (<code>&lt;base&gt;/dns64</code>)</td>
+<td>–</td>
+</tr>
+<tr>
+<td>Symbol-Abzeichen</td>
+<td><code>ON</code> grün = Listen greifen · <code>OFF</code> orange = pausiert · <code>!</code> rot = Node/Key-Problem</td>
+<td><code>GET /dns64/status</code></td>
+</tr>
+<tr>
+<td>Hell/Dunkel</td>
+<td>folgt System/Browser, Knopf im Kopf kehrt relativ um</td>
+<td><code>prefers-color-scheme</code> + <code>chrome.storage</code></td>
+</tr>
+</tbody>
+</table>
+<p>Tastenkürzel im Popup: <code>T</code> Blockieren umschalten, <code>A</code> erlauben, <code>D</code> sperren.
+Eingabefelder sind ausgenommen, damit Tippen nichts auslöst.</p>
+<p>Entwicklerhilfe: <code>popup.html?site=example.com</code> zeigt das Popup mit fester Domain statt der
+des aktiven Tabs.</p>
+<h3>Einrichtung</h3>
+<p>Zahnrad → Node-Adresse + API-Key (aus <em>Einstellungen › API-Keys</em>), „Verbindung testen".
+Beim ersten Start führt das Popup selbst durch die Einrichtung: <strong>beide Felder leer</strong>, das
+Beispiel steht nur als Platzhalter darin.</p>
+<p>Der Key liegt ausschließlich in <code>chrome.storage.local</code> dieser Erweiterung – nicht im Sync,
+nicht im Code, nicht im Paket.</p>
+<hr>
+<h2>2. Architektur</h2>
+<pre><code>popup.html ──&gt; popup.js ──┐
+                           ├─&gt; theme.js   (Hell/Dunkel, gemeinsame Palette theme.css)
+options.html ─&gt; options.js ┘
+
+background.js (Service Worker)  – Abzeichen am Symbol, 1-Minuten-Alarm
+</code></pre>
+<ul>
+<li><strong>Kein Content-Script.</strong> Die Erweiterung liest keine Webseiten. Vom aktiven Tab wird nur
+  der Hostname gelesen (<code>activeTab</code>), damit die Domain-Karte weiß, worum es geht.</li>
+<li><strong>Kein Remote-Code, kein <code>eval</code>, keine dynamischen <code>innerHTML</code>-Zuweisungen.</strong> Symbole stehen
+  statisch im HTML, Text wird über <code>textContent</code> gesetzt.</li>
+<li><strong>ES-Module</strong> für die Seiten (<code>&lt;script type="module"&gt;</code>); der Service Worker ist klassisch
+  (Vorgabe von MV3).</li>
+<li>Alle Netzwerkaufrufe gehen an <strong>eine</strong> Adresse: die eingetragene Node
+  (<code>http://…</code> oder <code>https://…</code>), Pfad <code>/api/…</code>, Header <code>Authorization: Bearer node64_…</code>.</li>
+</ul>
+<h3>Dateien (1.4.0)</h3>
+<table>
+<thead>
+<tr>
+<th>Datei</th>
+<th>Zeilen</th>
+<th>Inhalt</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>manifest.json</code></td>
+<td>50</td>
+<td>MV3, Berechtigungen, Popup, Optionsseite, Service Worker</td>
+</tr>
+<tr>
+<td><code>popup.html</code> / <code>popup.css</code> / <code>popup.js</code></td>
+<td>112 / 367 / 602</td>
+<td>Bedienoberfläche 380 px, zwei Karten, Toasts</td>
+</tr>
+<tr>
+<td><code>options.html</code> / <code>options.js</code></td>
+<td>92 / 72</td>
+<td>Adresse + Key, Verbindungstest</td>
+</tr>
+<tr>
+<td><code>theme.js</code> / <code>theme.css</code></td>
+<td>106 / 82</td>
+<td>Hell/Dunkel-Logik und Farbpalette beider Modi</td>
+</tr>
+<tr>
+<td><code>background.js</code></td>
+<td>102</td>
+<td>Abzeichen (<code>ON</code>/<code>OFF</code>/<code>!</code>), Alarm, 401-Sperre</td>
+</tr>
+<tr>
+<td><code>icons/</code></td>
+<td>–</td>
+<td>16/32/48/128/512 px + <code>node64-mark.png</code> (aus dem Node64-Logo)</td>
+</tr>
+<tr>
+<td><code>NOTICE.md</code>, <code>LICENSE.md</code></td>
+<td>–</td>
+<td>Herkunft des Logos, Apache-2.0-Text</td>
+</tr>
+<tr>
+<td><code>README.md</code></td>
+<td>–</td>
+<td>Kurzfassung für Anwender</td>
+</tr>
+</tbody>
+</table>
+<p>Gesamtgröße des Pakets: rund 100 KB (ohne Doku-Bilder).</p>
+<hr>
+<h2>3. API-Nutzung</h2>
+<p>Alle zwölf im Code verwendeten Endpunkte sind in der API-Referenz der Node beschrieben –
+HTML unter <code>/api/docs</code>, maschinenlesbar unter <code>/api/openapi.json</code> (API 1.2.0).
+Geprüft mit einem Skript, das die <code>api('…')</code>-Aufrufe aus dem Quelltext zieht und gegen
+<code>/api/openapi.json</code> hält – inklusive Feldtypen der Antworten.</p>
+<table>
+<thead>
+<tr>
+<th>Methode</th>
+<th>Pfad</th>
+<th>Anfrage</th>
+<th>gelesene Antwortfelder</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td><code>/dns64/status</code></td>
+<td>–</td>
+<td><code>version</code>, <code>listen</code>, <code>blocking.{paused, until_resumed, paused_until}</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/dns64/summary?range=24h</code></td>
+<td>–</td>
+<td><code>summary.{total, blocked, cached, clients}</code>, <code>blocklistSize</code>, <code>listsLoadedAt</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/dns64/log?limit=100&amp;q=&lt;name&gt;</code></td>
+<td>–</td>
+<td><code>rows[].{t, domain, status, reason, rcode}</code>, <code>total</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/dns64/allowlist</code></td>
+<td>–</td>
+<td><code>[].{domain, addedAt}</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/dns64/allowlist</code></td>
+<td><code>{domain}</code></td>
+<td><code>domain</code> (normalisiert)</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td><code>/dns64/allowlist?domain=</code></td>
+<td>–</td>
+<td>204</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/dns64/denylist</code></td>
+<td>–</td>
+<td><code>[].{domain, addedAt}</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/dns64/denylist</code></td>
+<td><code>{domain}</code></td>
+<td><code>domain</code>; 400 = ungültiger Name, 503 = Sperrliste nicht geladen</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td><code>/dns64/denylist?domain=</code></td>
+<td>–</td>
+<td>204</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/dns64/records</code></td>
+<td>–</td>
+<td><code>[].{name, type, value}</code> (nur für die Anzeige „lokaler Eintrag")</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/dns64/pause</code></td>
+<td><code>{minutes: 0…1440}</code></td>
+<td><code>paused</code>, <code>until_resumed</code>, <code>paused_until</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/dns64/resume</code></td>
+<td><code>{}</code></td>
+<td>dieselben Felder</td>
+</tr>
+</tbody>
+</table>
+<p>Anmerkungen zur Konformität:</p>
+<ul>
+<li><code>minutes: 0</code> ist laut Schema erlaubt (<code>minimum: 0</code>) und bedeutet „bis zum Wiedereinschalten".</li>
+<li>Freigabe und eigene Sperre schließen sich serverseitig aus („Eine gleiche Freigabe fällt dabei
+  weg") – die Erweiterung nutzt das, statt selbst aufzuräumen.</li>
+<li>Fehlerantworten werden angezeigt, wie die Node sie liefert: 401 → „API-Key ungültig",
+  404 → „Modul aus?", 503 → Text der Node (z. B. „Sperrliste nicht geladen"), 429 → Hinweis.</li>
+<li>Statusabfragen sind billig; der Service Worker fragt nur <code>/dns64/status</code> (1×/Minute für das
+  Abzeichen), das Popup zusätzlich die Kennzahlen (alle 20 s, solange es offen ist).</li>
+</ul>
+<hr>
+<h2>4. Wie der Status der aktiven Seite entsteht</h2>
+<p>DNS64 hat keinen Endpunkt „ist Domain X gesperrt?". Die Erweiterung prüft deshalb in dieser
+Reihenfolge:</p>
+<ol>
+<li><strong>Eigene Sperrliste</strong> (<code>/dns64/denylist</code>, gilt samt Subdomains) → „Von dir gesperrt".</li>
+<li><strong>Freigabeliste</strong> (<code>/dns64/allowlist</code>, gilt samt Subdomains) → „Freigegeben".</li>
+<li><strong>Abfrage-Log</strong> der Domain (exakt), sonst der Elterndomain:
+   <code>blocked</code> → „Blockiert · <Listenname>", <code>custom</code> → „Lokaler Eintrag", <code>error</code> → „nicht auflösbar",
+   sonst „Nicht blockiert".</li>
+<li>Nichts gefunden → „Noch keine Abfrage im Log".</li>
+</ol>
+<p>Zwei Feinheiten, die aus Messungen stammen:</p>
+<ul>
+<li>Ein Log-Treffer mit <code>reason: own:&lt;domain&gt;</code> zählt <strong>nur</strong>, wenn der Name noch in der Denylist
+  steht. Sonst zeigt die Karte nach dem Aufheben eine Sperre an, die es nicht mehr gibt.</li>
+<li>Blockgründe werden lesbar gemacht (<code>group:…</code> → „Gerätegruppe …", <code>cat:…</code> → „Kategorie …").</li>
+</ul>
+<p>Genauigkeit: Das Log reicht <code>retention_days</code> zurück (Standard 7 Tage). Für jede besuchte Seite
+existiert ein Eintrag, weil der Browser sie auflösen musste. Eine Domain, die noch nie aufgelöst
+wurde, gilt als unbekannt – freigeben und sperren geht trotzdem.</p>
+<hr>
+<h2>5. Sicherheit</h2>
+<h3>Berechtigungen und ihre Begründung</h3>
+<table>
+<thead>
+<tr>
+<th>Berechtigung</th>
+<th>Wozu</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>storage</code></td>
+<td>Node-Adresse, API-Key, Hell/Dunkel, 401-Zeitstempel</td>
+</tr>
+<tr>
+<td><code>alarms</code></td>
+<td>1-Minuten-Takt für das Abzeichen (<code>⏸</code>/<code>ON</code>/<code>OFF</code>/<code>!</code>)</td>
+</tr>
+<tr>
+<td><code>activeTab</code></td>
+<td>Hostname des aktiven Tabs für die Domain-Karte; Zugriff nur nach Klick auf das Symbol</td>
+</tr>
+<tr>
+<td><code>host_permissions: http://*/*, https://*/*</code></td>
+<td>Die Node-Adresse ist frei wählbar (IP, Name, Port, HTTP oder HTTPS), deshalb weit gefasst. Anfragen gehen ausschließlich an die eingetragene Adresse; es gibt keine Liste von Fremdhosts. Wer das enger will, kann im Manifest <code>optional_host_permissions</code> mit dem konkreten Ursprung verwenden und die Freigabe beim Speichern anfordern.</td>
+</tr>
+</tbody>
+</table>
+<p>Kein <code>tabs</code>, kein <code>scripting</code>, kein <code>webRequest</code>, kein <code>cookies</code>, kein <code>management</code>.</p>
+<h3>Umgang mit dem API-Key</h3>
+<ul>
+<li>Nur <code>chrome.storage.local</code> (profilgebunden, nicht synchronisiert), <code>type="password"</code> im Feld.</li>
+<li>Kein Key im Repository, im Paket oder in Logs.</li>
+<li><strong>Rücksicht auf die Ratengrenze der Node:</strong> Nach fünf ungültigen Keys sperrt die Node die
+  ganze Quell-IP (429, danach ein Versuch je 30 s). Ein veralteter Key im Speicher würde also
+  auch den neu eingetragenen blockieren. Deshalb: Statusabfrage einzeln und zuerst, bei 401 alle
+  Timer stoppen, im Service Worker 15 Minuten Pause, und beim Ändern von Adresse/Key wird die
+  Sperre sofort aufgehoben. Gemessen: ein Popup-Öffnen mit falschem Key kostet <strong>einen</strong> Request
+  statt fünf.</li>
+</ul>
+<h3>Weitere Punkte</h3>
+<ul>
+<li>Keine dynamischen HTML-Zuweisungen (kein <code>innerHTML</code> mit Variablen), keine Inline-Skripte,
+  keine <code>eval</code>-Familie – geprüft durch <code>eslint-plugin-no-unsanitized</code> und <code>addons-linter</code>.</li>
+<li>MV3-CSP bleibt unverändert (<code>script-src 'self'</code>); es werden keine CSP-Ausnahmen gebraucht.</li>
+<li>Schreibende Aktionen sind auf vier Dinge beschränkt: Pause/Fortsetzen, Freigabe an/aus,
+  eigene Sperre an/aus. Nichts anderes wird je gesendet.</li>
+<li>Oberfläche ist deutschsprachig, Zahlen in <code>de-DE</code>-Formatierung.</li>
+</ul>
+<hr>
+<h2>6. Hell/Dunkel</h2>
+<ul>
+<li>Quelle ist <code>matchMedia('(prefers-color-scheme: dark)')</code> in der Seite – in Chromium ist das die
+  Einstellung <em>Einstellungen → Darstellung → Modus</em> (gemessen: <code>color_scheme2</code> 1 = hell,
+  2 = dunkel, 0 = Gerät/System).</li>
+<li>Der Knopf speichert <strong>relativ</strong> (<code>themeInverted</code>), wirksam dunkel = <code>systemDark !== inverted</code>.
+  Damit folgt die Anzeige nach dem Umkehren weiter dem System; die Akzentfarbe am Knopf zeigt
+  „manuell".</li>
+<li><strong>Drei Trigger</strong>, weil ein einzelner nicht reicht: <code>change</code> der MediaQuery, ein Abgleich alle
+  1,5 s (idempotent) und <code>focus</code>/<code>visibilitychange</code>. Messung in Chromium 155: nach einem echten
+  Theme-Wechsel bei geöffneter Seite war <code>matchMedia.matches</code> bereits <code>true</code>, die Oberfläche aber
+  unverändert – das <code>change</code>-Event kommt in Erweiterungsseiten nicht zuverlässig an. Mit dem
+  Abgleich zieht die Anzeige innerhalb von 2 s nach.</li>
+</ul>
+<h3>Kontraste (gemessen, WCAG 2.1)</h3>
+<table>
+<thead>
+<tr>
+<th>Paar</th>
+<th>dunkel</th>
+<th>hell</th>
+<th>AA (4,5:1)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Text auf Fläche</td>
+<td>15,6</td>
+<td>16,4</td>
+<td>erfüllt</td>
+</tr>
+<tr>
+<td>Text auf Karte</td>
+<td>14,2</td>
+<td>18,0</td>
+<td>erfüllt</td>
+</tr>
+<tr>
+<td>Untertitel</td>
+<td>7,5</td>
+<td>7,3</td>
+<td>erfüllt</td>
+</tr>
+<tr>
+<td>kleine Labels / Fußzeile</td>
+<td>5,4–5,9</td>
+<td>5,0–5,5</td>
+<td>erfüllt</td>
+</tr>
+<tr>
+<td>„Blockiert" (rot)</td>
+<td>7,4</td>
+<td>7,0</td>
+<td>erfüllt</td>
+</tr>
+<tr>
+<td>„Freigegeben" (grün)</td>
+<td>10,6</td>
+<td>6,2</td>
+<td>erfüllt</td>
+</tr>
+<tr>
+<td>Links</td>
+<td>6,4</td>
+<td>5,8</td>
+<td>erfüllt</td>
+</tr>
+<tr>
+<td>Pausiert-Banner</td>
+<td>10,6</td>
+<td>6,3</td>
+<td>erfüllt</td>
+</tr>
+<tr>
+<td>Toast ok / Fehler</td>
+<td>11,0 / 9,7</td>
+<td>7,6 / 7,9</td>
+<td>erfüllt</td>
+</tr>
+<tr>
+<td>Primärknopf (weiß auf grün)</td>
+<td>5,0</td>
+<td>5,0</td>
+<td>erfüllt</td>
+</tr>
+<tr>
+<td>Abzeichen <code>ON</code> / <code>OFF</code> / <code>!</code></td>
+<td>4,6 / 5,2 / 6,5</td>
+<td>–</td>
+<td>erfüllt</td>
+</tr>
+</tbody>
+</table>
+<p>Zwei Werte lagen zuvor unter 4,5:1 (kleine Schrift im Hellmodus 3,8; Labels 4,3) und wurden für
+1.4.0 nachgezogen.</p>
+<hr>
+<h2>7. Audit</h2>
+<p>Werkzeuge (keine Eigenbewertung):</p>
+<table>
+<thead>
+<tr>
+<th>Werkzeug</th>
+<th>Version</th>
+<th>Ergebnis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>addons-linter</code> via <code>web-ext lint</code></td>
+<td>web-ext 10.8.0 / addons-linter 10.14.0</td>
+<td>0 Warnungen im Code; 2 Fehler und 1 Warnung sind Firefox-Vorgaben (<code>background.scripts</code>-Fallback, <code>browser_specific_settings.gecko.id</code>, <code>data_collection_permissions</code>) und für eine Chromium-MV3-Erweiterung nicht erfüllbar/nicht relevant</td>
+</tr>
+<tr>
+<td><code>eslint</code> mit <code>eslint-plugin-security</code> 4.2.1 und <code>eslint-plugin-no-unsanitized</code> 4.1.5</td>
+<td>eslint 10.14.0</td>
+<td><strong>0 Probleme</strong> (Regelsatz: security/recommended, no-unsanitized property+method, no-eval, no-implied-eval, no-new-func, no-script-url, no-undef, eqeqeq u. a.)</td>
+</tr>
+<tr>
+<td>API-Abgleich gegen <code>/api/openapi.json</code></td>
+<td>eigenes Skript</td>
+<td>12/12 Endpunkte dokumentiert, Antwortfeldtypen stimmen</td>
+</tr>
+<tr>
+<td>Laufzeittest</td>
+<td>Chromium 155 headless via CDP</td>
+<td>keine Konsolen-Exceptions, keine CSP-Verstöße</td>
+</tr>
+</tbody>
+</table>
+<p>Behobene Befunde:</p>
+<ol>
+<li><code>innerHTML</code> mit Variablen an zwei Stellen (Banner-Text, Theme-Symbol) → durch <code>textContent</code>
+   bzw. statisches Markup + <code>data-icon</code> ersetzt.</li>
+<li>Ein Shell-Skript lag im Erweiterungsordner (<code>FLAGGED_FILE_EXTENSION</code>) → Build-Skript liegt
+   jetzt außerhalb (<code>~/git/dns64-switch-build.sh</code>).</li>
+<li><code>initTheme</code> war als globales Skript über drei Dateien verteilt → ES-Modul mit <code>import</code>.</li>
+<li>Zwei Kontrastwerte unter AA (siehe Abschnitt 6).</li>
+</ol>
+<p>Wiederholen:</p>
+<pre><code class="language-bash"># Lint wie oben (Werkzeuge liegen außerhalb des Projekts)
+web-ext lint --source-dir ~/git/dns64-switch
+eslint --config &lt;audit&gt;/eslint.config.mjs &lt;kopie&gt;/*.js
+# API-Konformität
+python3 api-check.py &lt;openapi-live.json&gt; node64_…
+</code></pre>
+<hr>
+<h2>8. Testprotokoll (Auszug, alles gegen eine echte Node)</h2>
+<table>
+<thead>
+<tr>
+<th>Prüfung</th>
+<th>Ergebnis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pause 1/2/5/30 min, ∞, Fortsetzen</td>
+<td>Zustand jeweils per API gegengelesen, Countdown läuft sekundengenau</td>
+</tr>
+<tr>
+<td>Erlauben/Sperren, je zweimal</td>
+<td>Listen der Node danach leer, keine Reste</td>
+</tr>
+<tr>
+<td>Sperre wirkt</td>
+<td>DNS-Abfrage gegen die Node liefert für Domain und Subdomain <code>0.0.0.0</code>; Log <code>status: blocked</code>, <code>reason: own:&lt;domain&gt;</code></td>
+</tr>
+<tr>
+<td>Freigabe hebt Sperre auf</td>
+<td>Denylist-Eintrag verschwindet serverseitig</td>
+</tr>
+<tr>
+<td>Fremde Blockliste</td>
+<td><code>doubleclick.net</code> → „Blockiert · StevenBlack Unified"</td>
+</tr>
+<tr>
+<td>Aufheben</td>
+<td>Karte zeigt sofort „Nicht blockiert", kein Nachleuchten aus dem Log</td>
+</tr>
+<tr>
+<td>Abzeichen</td>
+<td>ohne Key leer · aktiv <code>ON</code>/<code>#17864a</code> · pausiert <code>OFF</code>/<code>#a05d00</code> mit „bis HH:MM" · Node weg <code>!</code>/<code>#b91c1c</code></td>
+</tr>
+<tr>
+<td>Falscher Key</td>
+<td>ein Request, Titel „API-Key prüfen", Domain-Karte „nicht abrufbar", keine weiteren Versuche</td>
+</tr>
+<tr>
+<td>Theme</td>
+<td>Systemwechsel bei geöffneter Seite zieht in ≤2 s nach; Umkehrung bleibt relativ</td>
+</tr>
+<tr>
+<td>Einrichtung</td>
+<td>beide Felder leer mit Platzhalter, klare Meldung bei fehlender Adresse</td>
+</tr>
+<tr>
+<td>Aufräumen</td>
+<td>nach jedem Test: Pause beendet, Listen leer, DNS-Einträge unverändert</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>9. Bauen und Ausliefern</h2>
+<pre><code class="language-bash">~/git/dns64-switch-build.sh                # erzeugt ~/git/dns64-switch.crx (~100 KB)
+</code></pre>
+<ul>
+<li>Das Skript packt ohne <code>docs/</code>, <code>*.pem</code>, <code>*.crx</code> und ohne sich selbst.</li>
+<li>Signiert wird mit <code>~/git/dns64-switch.pem</code> → ID <code>afeiagkmnfjohhngcmpkolbgjgelilai</code>.
+  <strong>Der Schlüssel darf nicht verloren gehen</strong>: eine neue ID bedeutet Neuinstallation und leeren
+  Speicher (API-Key neu eintragen).</li>
+<li>Verteilung im eigenen Store auf dem NAS: <code>http://&lt;nas&gt;:8115</code> (CRX ablegen, Store scannt bei
+  jedem Request) und <code>https://&lt;nas&gt;:8443</code> für den Klick-Weg; <code>update.xml</code> meldet die höchste
+  Version je ID.</li>
+<li>Alternativ „Entpackte Erweiterung laden" in <code>chromium://extensions</code> (Entwicklermodus).</li>
+</ul>
+<hr>
+<h2>10. Bewusste Grenzen</h2>
+<ul>
+<li><strong>Pausen sind nodeweit und mindestens eine Minute.</strong> Kein Sub-Minuten-Wert (Pi-hole kann 10 s),
+  keine Freigabe „nur für 10 Minuten" je Domain – dafür fehlt der Endpunkt.</li>
+<li><strong>Keine Gerätegruppen.</strong> DNS64-Gruppen (Kinder, Gäste, Zeitpläne, <code>hold</code>) haben eigene Regeln;
+  die Erweiterung fasst sie nicht an, um nicht versehentlich Familienregeln zu ändern.</li>
+<li><strong>Keine Ziel-IP-Sperren.</strong> DNS kennt nur Namen; IP-Sperren gibt es nur in PROXY64 bzw. in der
+  Firewall (OPNsense).</li>
+<li><strong>Status aus dem Log</strong> statt aus einer Live-Abfrage: eine nie aufgelöste Domain gilt als
+  unbekannt.</li>
+<li>Nur DNS64 wird bedient (keine Healthchecks, kein DynDNS, kein PROXY64).</li>
+<li>Der API-Key ist ein Vollzugriffsschlüssel der Node; die Erweiterung braucht keine feineren
+  Rechte, weil die API keine kennt.</li>
+</ul>
+<hr>
+<h2>11. Lizenz und Herkunft</h2>
+<ul>
+<li><strong>Icon:</strong> Kachel „64" aus dem Node64-Logo (<code>static/img/node64.svg</code> des Projekts
+  <a href="https://github.com/ipv64net/node64">https://github.com/ipv64net/node64</a>), aus dem Vektor gerendert. Lizenz <strong>Apache-2.0</strong>,
+  Text in <code>LICENSE.md</code>. Das Logo bleibt Eigentum der <strong>Prox IT UG / ipv64.net</strong> und wird hier nur
+  zur Kennzeichnung dieser Erweiterung für dieselbe Software verwendet.</li>
+<li>Die Ziffern der Kachel sind transparent (kein weißer Grund), damit sie die Farbe der Leiste
+  annehmen – hell im hellen, dunkel im dunklen Modus.</li>
+<li><strong>Quelltext dieser Erweiterung:</strong> Apache License 2.0 (Text in <code>LICENSE.md</code>,
+  Copyright 2026 GrepVortex). Eigenständig entstanden, nicht Teil von Node64, weder von
+  ipv64.net noch von der Prox IT UG herausgegeben. Details in <code>NOTICE.md</code>.</li>
+<li>Marken- und Namensnennungen (Node64, ipv64.net) dienen nur der Beschreibung der Kompatibilität.</li>
+</ul>
+</main>
+<footer class="site"><div class="bar">
+  <a href="./">Start</a><a href="dokumentation.html">Dokumentation</a>
+  <a href="datenschutz.html">Datenschutz</a><a href="lizenz.html">Lizenz &amp; Herkunft</a>
+  <a href="https://github.com/GrepVortex/dns64-browser-extension">Quellcode</a>
+</div></footer>
+</body>
+</html>
